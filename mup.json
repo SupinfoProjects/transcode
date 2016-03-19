@@ -21,7 +21,7 @@
   "app": ".",
   "env": {
     "ROOT_URL": "http://transcode.com",
-    "MONGO_URL": "mongodb://192.168.56.21/transcode",
+    "MONGO_URL": "mongodb://mongo1,mongo2,mongo3/transcode?replicaSet=transcode",
     "CLUSTER_DISCOVERY_URL": "mongodb://192.168.56.21/transcode",
     "CLUSTER_SERVICE": "web"
   },
