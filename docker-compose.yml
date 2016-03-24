@@ -1,0 +1,67 @@
+version: '2'
+services:
+    meteor1:
+        image: meteorhacks/meteord:onbuild
+        ports:
+            - "80:80"
+        links:
+            - meteor2
+            - mongo1
+            - mongo2
+            - mongo3
+        environment:
+            - MONGO_URL=mongodb://mongo1,mongo2,mongo3/transcode?replicaSet=transcode
+            - ROOT_URL=http://transcode.com
+            - CLUSTER_DISCOVERY_URL=mongodb://mongo1,mongo2,mongo3/transcode?replicaSet=transcode
+            - CLUSTER_SERVICE=web
+    meteor2:
+        image: meteorhacks/meteord:onbuild
+        ports:
+            - "80:80"
+        links:
+            - mongo1
+            - mongo2
+            - mongo3
+        environment:
+            - MONGO_URL=mongodb://mongo1,mongo2,mongo3/transcode?replicaSet=transcode
+            - ROOT_URL=http://transcode.com
+            - CLUSTER_DISCOVERY_URL=mongodb://mongo1,mongo2,mongo3/transcode?replicaSet=transcode
+            - CLUSTER_SERVICE=web
+    mongo1:
+        image: mongo:latest
+        links:
+            - mongo2
+            - mongo3
+        ports:
+            - "27017:27017"
+        command: mongod --smallfiles --replSet transcode
+    mongo2:
+        image: mongo:latest
+        ports:
+            - "27018:27017"
+        command: mongod --smallfiles --replSet transcode
+    mongo3:
+        image: mongo:latest
+        ports:
+            - "27019:27017"
+        command: mongod --smallfiles --replSet transcode
+    core:
+        image: celery
+        environment:
+            - C_FORCE_ROOT=true
+            - BROKER_URL=mongodb://mongo1,mongo2,mongo3/transcode?replicaSet=transcode
+        links:
+            - mongo1
+            - mongo2
+            - mongo3
+    worker:
+        image: celery
+        environment:
+            - C_FORCE_ROOT=true
+            - BROKER_URL=mongodb://mongo1,mongo2,mongo3/transcode?replicaSet=transcode
+        links:
+            - core
+        command: bash -c "sleep 5 && celery -A transcode worker --concurrency=1"
+
+
+
