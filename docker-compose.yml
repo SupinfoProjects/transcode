@@ -18,18 +18,12 @@ services:
       - /var/lib/data
   mongo_1:
     image: mongo
-    ports:
-      - "27017"
     command: --smallfiles --replSet transcode --quiet
   mongo_2:
     image: mongo
-    ports:
-      - "27018"
     command: --smallfiles --replSet transcode --quiet
   mongo_3:
     image: mongo
-    ports:
-      - "27019"
     command: --smallfiles --replSet transcode --quiet
   mongo_setup:
     image: kokaz/mongo-shell
@@ -39,6 +33,11 @@ services:
       - mongo_3
     volumes:
       - ./scripts:/scripts
+    environment:
+      DATABASE: transcode
+      REPLICA_SET_ID: transcode
+      PRIMARY_MEMBER: mongo_1:27017
+      SECONDARY_MEMBERS: mongo_2:27017,mongo_3:27017
     entrypoint: /scripts/mongoSetup.sh
   # core:
   #   image: celery
