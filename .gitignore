@@ -1,3 +1,5 @@
 .idea
 .meteor/local
 .meteor/meteorite
+tests/core/__pycache__/
+tests/worker/__pycache__/
