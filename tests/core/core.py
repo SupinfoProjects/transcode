@@ -1,25 +1,18 @@
 import os
 import re
 import shlex
-from subprocess import PIPE, Popen
-from subprocess import check_call
+from subprocess import PIPE, Popen, DEVNULL, check_call
+
 from celery import Celery
-from worker import worker
+from celery.result import ResultSet
 
-app = Celery('core', backend='rpc://', broker='amqp://')
+from worker.worker import process_video_part
 
-app.conf.CELERY_TASK_SERIALIZER = 'json'
-app.conf.CELERY_ACCEPT_CONTENT = ['json']
-app.conf.CELERY_RESULT_SERIALIZER = 'json'
-app.conf.CELERY_TIMEZONE = 'Europe/Paris'
-app.conf.CELERY_ENABLE_UTC = True
-app.conf.CELERY_REDIRECT_STDOUTS = True
-app.conf.CELERY_REDIRECT_STDOUTS_LEVEL = 'DEBUG'
-
+app = Celery('core', backend='amqp', broker='amqp://')
 WORKERS = 10
 
 
-@app.task
+@app.task(name='core.process_video')
 def process_video(input_path, output_format):
     video_length = get_video_length(input_path)
     part_length = int(video_length / WORKERS)
@@ -50,16 +43,15 @@ def get_video_length(input_path):
 
 
 def convert_video(input_path, output_format, video_length, part_length):
-    output_part_paths = []
+    rs = ResultSet([])
 
     for i in range(WORKERS):
         start_at = i * part_length
         stop_at = start_at + part_length if i != WORKERS - 1 else video_length
         print("worker {} will process from {}s to {}s".format(i + 1, start_at, stop_at))
-        output_part_path = worker.process_video_part(input_path, output_format, start_at, stop_at)
-        output_part_paths.append(output_part_path)
+        rs.add(process_video_part.delay(input_path, output_format, start_at, stop_at))
 
-    return output_part_paths
+    return rs.get()
 
 
 def create_parts_list(input_name, output_part_paths):
@@ -81,9 +73,9 @@ def concatenate_video_parts(input_path, output_format, output_part_paths):
     parts_list_path = create_parts_list(input_name, output_part_paths)
     output_path = "{}/.tmp/{}.{}".format(os.getcwd(), input_name, output_format)
 
-    template = "ffmpeg -f concat -i {} -c copy -strict -2 {}"
+    template = "ffmpeg -f concat -safe 0 -i {} -c copy -strict -2 {}"
     command = template.format(parts_list_path, output_path)
-    check_call(shlex.split(command), universal_newlines=True)
+    check_call(shlex.split(command), universal_newlines=True, stdout=DEVNULL, stderr=DEVNULL)
 
     os.remove(parts_list_path)
 
