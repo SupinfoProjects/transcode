@@ -55,6 +55,9 @@ services:
       - broker
     volumes_from:
       - data
+    volumes:
+      - ./scripts:/home/user
+    command: bash -c "celery -A core worker -l info --app=core.core.app"
     expose:
       - "5555"
   broker:
@@ -77,7 +80,7 @@ services:
     volumes_from:
       - data
     volumes:
-      - ./celery/:/home/user
-    command: bash -c "sleep 5 && celery -A worker worker"
+      - ./scripts:/home/user
+    command: bash -c "celery -A worker worker -l info --app=worker.worker.app"
     expose:
       - "5555"
