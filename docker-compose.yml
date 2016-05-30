@@ -1,16 +1,7 @@
 version: '2'
 services:
-  # meteor_1:
-  #   image: ubuntu
-  #   ports:
-  #     - "80:80"
-  #   links:
-  #     - mongo_1
-  #     - mongo_2
-  #     - mongo_3
-  #     - mongo_setup
-  # meteor_2:
-  #   image: ubuntu
+  # meteor:
+  #   image: wdhif/transcode-meteor
   #   expose:
   #     - "80"
   #   links:
@@ -18,9 +9,17 @@ services:
   #     - mongo_2
   #     - mongo_3
   #     - mongo_setup
-  #     - meteor_1
-  # meteor_setup:
-  #   image: ubuntu
+  #   environment:
+  #     # TODO: Check ROOT_URL=> Optionnal? IPaddress of master node ?
+  #     # ROOT_URL: "http://transcode.com"
+  #     ROOT_URL: balancer
+  #     MONGO_URL: "mongodb://mongo_1:27017,mongo_2:27017,mongo_3:27017/transcode?replicaSet=transcode"
+  #     CLUSTER_DISCOVERY_URL: "mongodb://mongo_1:27017,mongo_2:27017,mongo_3:27017/transcode?replicaSet=transcode"
+  #     CLUSTER_SERVICE: "web"
+  #     DATABASE: transcode
+  #     REPLICA_SET_ID: transcode
+  #     PRIMARY_MEMBER: mongo_1:27017
+  #     SECONDARY_MEMBERS: mongo_2:27017,mongo_3:27017
   # mongo_1:
   #   image: mongo
   #   command: --smallfiles --replSet transcode --quiet
@@ -47,7 +46,7 @@ services:
     volumes:
       - /var/lib/data
   core:
-    image: celery
+    image: rabbitmq
     environment:
       - C_FORCE_ROOT=true
       - BROKER_URL=amqp://guest:guest@broker//
@@ -60,6 +59,9 @@ services:
       - "5555"
   broker:
     image: rabbitmq
+    # image: tumtum/rabbitmq
+    # environment:
+    #   - RABBITMQ_PASS=transcode
     expose:
       - "5672"
   worker:
@@ -68,11 +70,14 @@ services:
       - C_FORCE_ROOT=true
       - BROKER_URL=amqp://guest:guest@broker//
       - CELERY_BROKER_URL=amqp://guest:guest@broker//
+      # - CELERY_APP=tasks
     links:
       - core
       - broker
     volumes_from:
       - data
-    command: bash -c "sleep 5 && celery -A transcode worker --concurrency=1"
+    volumes:
+      - ./celery/:/home/user
+    command: bash -c "sleep 5 && celery -A worker worker"
     expose:
       - "5555"
