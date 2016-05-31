@@ -15,7 +15,7 @@ app.conf.CELERY_ENABLE_UTC = True
 @app.task(name='worker.process_video_part')
 def process_video_part(input_path, output_format, start_at, stop_at):
     input_part_path = extract_video_part(input_path, start_at, stop_at)
-    output_part_path = convert_video_part(input_part_path, output_format)
+    output_part_path = convert_part(input_part_path, output_format)
 
     return output_part_path
 
@@ -34,7 +34,7 @@ def extract_video_part(input_path, start_at, stop_at):
     return input_part_path
 
 
-def convert_video_part(input_part_path, output_format):
+def convert_part(input_part_path, output_format):
     base_name = os.path.basename(input_part_path)
     input_name = os.path.splitext(base_name)[0]
 

@@ -3,6 +3,7 @@ import re
 import shlex
 from subprocess import PIPE, Popen, DEVNULL, check_call
 
+import sys
 from celery import Celery
 from celery.result import ResultSet
 
@@ -12,18 +13,12 @@ app = Celery('core', backend='amqp', broker='amqp://')
 WORKERS = 10
 
 
-@app.task(name='core.process_video')
-def process_video(input_path, output_format):
-    video_length = get_video_length(input_path)
-    part_length = int(video_length / WORKERS)
-
-    output_part_paths = convert_video(input_path, output_format, video_length, part_length)
-    output_path = concatenate_video_parts(input_path, output_format, output_part_paths)
-
-    return output_path
+# Video and audio
+def get_total_workers():
+    return WORKERS
 
 
-def get_video_length(input_path):
+def get_file_length(input_path):
     ffmpeg_info = Popen(["ffmpeg", "-i", input_path], stdout=PIPE, stderr=PIPE, universal_newlines=True)
     output = Popen(["grep", 'Duration'], stdin=ffmpeg_info.stderr, stdout=PIPE, universal_newlines=True)
     ffmpeg_info.stdout.close()
@@ -39,7 +34,19 @@ def get_video_length(input_path):
 
         return hours * 3600 + minutes * 60 + seconds + milliseconds
     else:
-        raise Exception("Video length not found")
+        raise Exception("File length not found {}".format(input_path))
+
+
+# Video
+@app.task(name='core.process_video')
+def process_video(input_path, output_format):
+    video_length = get_file_length(input_path)
+    part_length = int(video_length / WORKERS)
+
+    output_part_paths = convert_video(input_path, output_format, video_length, part_length)
+    output_path = concatenate_video_parts(input_path, output_format, output_part_paths)
+
+    return output_path
 
 
 def convert_video(input_path, output_format, video_length, part_length):
@@ -81,5 +88,17 @@ def concatenate_video_parts(input_path, output_format, output_part_paths):
 
     for output_part_path in output_part_paths:
         os.remove(output_part_path)
+
+    return output_path
+
+
+# Audio
+@app.task(name='core.process_audio')
+def process_audio(input_path, output_format):
+    audio_length = get_file_length(input_path)
+    part_length = int(audio_length / WORKERS)
+
+    output_part_paths = convert_audio(input_path, output_format, audio_length, part_length)
+    output_path = concatenate_audio_parts(input_path, output_format, output_part_paths)
 
     return output_path
