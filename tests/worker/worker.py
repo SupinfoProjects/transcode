@@ -12,38 +12,49 @@ app.conf.CELERY_TIMEZONE = 'Europe/Paris'
 app.conf.CELERY_ENABLE_UTC = True
 
 
-@app.task(name='worker.process_video_part')
-def process_video_part(input_path, output_format, start_at, stop_at):
-    input_part_path = extract_video_part(input_path, start_at, stop_at)
+@app.task(name='worker.process_part')
+def process_part(is_video, input_path, output_format, start_at, stop_at):
+    input_part_path = extract_part(is_video, input_path, start_at, stop_at)
     output_part_path = convert_part(input_part_path, output_format)
 
     return output_part_path
 
 
-def extract_video_part(input_path, start_at, stop_at):
+def extract_part(is_video, input_path, start_at, stop_at):
+    # Input part path
     base_name = os.path.basename(input_path)
     input_name = os.path.splitext(base_name)[0]
     input_format = os.path.splitext(base_name)[1]
 
     input_part_path = "{}/../.tmp/{}-{}{}".format(os.getcwd(), input_name, start_at, input_format)
 
-    template = "ffmpeg -y -i ../{} -ss {} -t {} -vcodec copy -acodec copy {}"
-    command = template.format(input_path, start_at, stop_at - start_at, input_part_path)
+    # Codecs
+    codecs = '-acodec copy'
+
+    if is_video:
+        codecs += ' -vcodec copy'
+
+    # Command
+    template = "ffmpeg -y -i ../{} -ss {} -t {} {} {}"
+    command = template.format(input_path, start_at, stop_at - start_at, codecs, input_part_path)
     check_call(shlex.split(command), universal_newlines=True)
 
     return input_part_path
 
 
 def convert_part(input_part_path, output_format):
+    # Output part path
     base_name = os.path.basename(input_part_path)
     input_name = os.path.splitext(base_name)[0]
 
     output_part_path = "{}/../.tmp/{}.{}".format(os.getcwd(), input_name, output_format)
 
+    # Command
     template = "ffmpeg -y -i {} -qscale 0 -strict -2 {}"
     command = template.format(input_part_path, output_part_path)
     check_call(shlex.split(command), universal_newlines=True)
 
+    # Remove input part
     os.remove(input_part_path)
 
     return output_part_path
