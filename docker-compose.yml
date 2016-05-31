@@ -1,86 +1,82 @@
 version: '2'
 services:
-  # meteor:
-  #   image: wdhif/transcode-meteor
-  #   expose:
-  #     - "80"
-  #   links:
-  #     - mongo_1
-  #     - mongo_2
-  #     - mongo_3
-  #     - mongo_setup
-  #   environment:
-  #     # TODO: Check ROOT_URL=> Optionnal? IPaddress of master node ?
-  #     # ROOT_URL: "http://transcode.com"
-  #     ROOT_URL: balancer
-  #     MONGO_URL: "mongodb://mongo_1:27017,mongo_2:27017,mongo_3:27017/transcode?replicaSet=transcode"
-  #     CLUSTER_DISCOVERY_URL: "mongodb://mongo_1:27017,mongo_2:27017,mongo_3:27017/transcode?replicaSet=transcode"
-  #     CLUSTER_SERVICE: "web"
-  #     DATABASE: transcode
-  #     REPLICA_SET_ID: transcode
-  #     PRIMARY_MEMBER: mongo_1:27017
-  #     SECONDARY_MEMBERS: mongo_2:27017,mongo_3:27017
-  # mongo_1:
-  #   image: mongo
-  #   command: --smallfiles --replSet transcode --quiet
-  # mongo_2:
-  #   image: mongo
-  #   command: --smallfiles --replSet transcode --quiet
-  # mongo_3:
-  #   image: mongo
-  #   command: --smallfiles --replSet transcode --quiet
-  # mongo_setup:
-  #   image: wdhif/mongo-replicaset-setup
-  #   links:
-  #     - mongo_1
-  #     - mongo_2
-  #     - mongo_3
-  #   environment:
-  #     DATABASE: transcode
-  #     REPLICA_SET_ID: transcode
-  #     PRIMARY_MEMBER: mongo_1:27017
-  #     SECONDARY_MEMBERS: mongo_2:27017,mongo_3:27017
+  meteor:
+    image: wdhif/transcode-meteor
+    expose:
+      - "80"
+    links:
+      - mongo_1
+      - mongo_2
+      - mongo_3
+      - mongo_setup
+    environment:
+      # TODO: ROOT_URL ? IPaddress of master node ?
+      # ROOT_URL: "http://transcode.com"
+      MONGO_URL: "mongodb://mongo_1:27017,mongo_2:27017,mongo_3:27017/transcode?replicaSet=transcode"
+      CLUSTER_DISCOVERY_URL: "mongodb://mongo_1:27017,mongo_2:27017,mongo_3:27017/transcode?replicaSet=transcode"
+      CLUSTER_SERVICE: "web"
+      DATABASE: transcode
+      REPLICA_SET_ID: transcode
+      PRIMARY_MEMBER: mongo_1:27017
+      SECONDARY_MEMBERS: mongo_2:27017,mongo_3:27017
+  mongo_1:
+    image: mongo
+    command: --smallfiles --replSet transcode --quiet
+  mongo_2:
+    image: mongo
+    command: --smallfiles --replSet transcode --quiet
+  mongo_3:
+    image: mongo
+    command: --smallfiles --replSet transcode --quiet
+  mongo_setup:
+    image: wdhif/mongo-replicaset-setup
+    links:
+      - mongo_1
+      - mongo_2
+      - mongo_3
+    environment:
+      DATABASE: transcode
+      REPLICA_SET_ID: transcode
+      PRIMARY_MEMBER: mongo_1:27017
+      SECONDARY_MEMBERS: mongo_2:27017,mongo_3:27017
   data:
     image: ubuntu
-    command: sleep infinity
     volumes:
       - /var/lib/data
+    command: sleep infinity
   core:
     image: wdhif/transcode-celery
+    expose:
+      - "5555"
+    links:
+      - broker
     environment:
       - C_FORCE_ROOT=true
       - BROKER_URL=amqp://guest:guest@broker//
       - CELERY_BROKER_URL=amqp://guest:guest@broker//
-    links:
-      - broker
     volumes_from:
-      - data
+      - data  
     volumes:
       - ./scripts:/home/user
     command: bash -c "celery -A core worker -l info --app=core.core.app"
-    expose:
-      - "5555"
   broker:
     image: rabbitmq
-    # image: tumtum/rabbitmq
-    # environment:
-    #   - RABBITMQ_PASS=transcode
     expose:
       - "5672"
   worker:
     image: wdhif/transcode-celery
+    expose:
+      - "5555"
+    links:
+      - core
+      - broker  
     environment:
       - C_FORCE_ROOT=true
       - BROKER_URL=amqp://guest:guest@broker//
       - CELERY_BROKER_URL=amqp://guest:guest@broker//
       # - CELERY_APP=tasks
-    links:
-      - core
-      - broker
-    volumes_from:
-      - data
     volumes:
       - ./scripts:/home/user
+    volumes_from:
+      - data
     command: bash -c "celery -A worker worker -l info --app=worker.worker.app"
-    expose:
-      - "5555"
