@@ -36,7 +36,7 @@ Template.profile.helpers({
                         data: data,
                         confirmButtonText: 'template.offer.credits.confirm',
                         callback: function () {
-                            Router.go('participate');
+                            return false;
                         }
                     });
                 }
@@ -44,3 +44,20 @@ Template.profile.helpers({
         };
     }
 });
+
+function openTransactionSuccessAlert (options) {
+    swal({
+        title: 'Payment achieved with success !',
+        text: Blaze.toHTML(Blaze.With(options.data, function () {
+            return Template.transactionSuccess;
+        })),
+        html: true,
+        type: 'success',
+        confirmButtonColor: '#35a992',
+        confirmButtonText: 'Continue'
+    }, function (isConfirm) {
+        if (isConfirm) {
+            options.callback();
+        }
+    });
+}

@@ -5,7 +5,7 @@
         "confirm": "Transcode a video",
         "title": "Transcode credits",
         "discount": "%s",
-        "price": "<strong>%s €</strong> <small>TTC</small>",
+        "price": "<strong>$%s</strong> <small>taxes included</small>",
         "li": {
           "1": "Use for transcoding videos",
           "2": "Transcoding a video can value several credits"

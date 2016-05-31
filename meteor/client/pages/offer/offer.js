@@ -6,11 +6,8 @@ Template.offer.onCreated(function () {
     this.computation = null;
     var self = this;
 
-    Tracker.autorun(function (c) {
-        if (!self.computation) {
-            self.computation = c;
-        }
-
+    self.autorun(function () {
+        console.log('ayooooooooooo');
         self.data.offer.set(getOffer(self.data).setReductions().setTaxes());
         self.data.offerWithoutReduction.set(getOffer(self.data).setTaxes());
     });
@@ -31,12 +28,6 @@ Template.offer.helpers({
     },
     discount: function () {
         return this.offer.get().getCents() < this.offerWithoutReduction.get().getCents();
-    }
-});
-
-Template.offer.onDestroyed(function () {
-    if (this.computation) {
-        this.computation.stop();
     }
 });
 
@@ -171,7 +162,7 @@ function openCheckoutModal (data, event, callback) {
         description: TAPi18n.__(data.stripe.description, {
             count: parseInt(offer.quantity)
         }),
-        amount: offer.getCents(),
+        amount: offer.setTaxes().getCents(),
         closed: function () {
             callback();
         }

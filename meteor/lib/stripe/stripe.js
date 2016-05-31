@@ -11,7 +11,8 @@ StripeHandler = function (handlerOptions, checkoutOptions) {
     this.checkoutOptions = _.defaults(handlerOptions || {}, {
         key: Meteor.settings.public.stripe.publishableKey,
         name: Meteor.settings.public.stripe.websiteName,
-        locale: 'auto'
+        locale: 'en',
+        panelLabel: 'Pay {{amount}}'
     });
 
     this.handlerOptions = _.defaults(checkoutOptions || {}, {

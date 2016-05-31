@@ -1,5 +1,5 @@
 Stripe = StripeAPI(Meteor.settings.stripe.secretKey);
-var Future = Meteor.npmRequire('fibers/future');
+var Future = Npm.require('fibers/future');
 
 createCharge = function (tokenId, amount) {
     var future = new Future();
@@ -14,7 +14,7 @@ createCharge = function (tokenId, amount) {
             return false;
         }
 
-        var id = Charges.insert(charge);
+        var id = Collection.Charges.insert(charge);
 
         future.return(id);
     }));
@@ -23,13 +23,13 @@ createCharge = function (tokenId, amount) {
 };
 
 getSuccessChargeData = function (chargeId, offer) {
-    var charge = Charges.findOne(chargeId);
+    var charge = Collection.Charges.findOne(chargeId);
 
     return {
         email: UserHelper.getEmail(Meteor.user()),
         last4: charge.source.last4,
         id: charge.id.replace('ch_', ''),
-        amount: offer.getTotal()
+        amount: offer.setTaxes().getTotal()
     };
 };
 

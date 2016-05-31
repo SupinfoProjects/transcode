@@ -22,7 +22,7 @@ Meteor.methods({
         });
 
         // Email for subscriber
-        sendPaymentEmail(user);
+        // sendPaymentEmail(user);
 
         return getSuccessChargeData(chargeId, offer);
     }

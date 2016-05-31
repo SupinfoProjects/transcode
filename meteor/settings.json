@@ -11,7 +11,7 @@
   },
   "public": {
     "stripe": {
-      "currency": "eur",
+      "currency": "USD",
       "publishableKey": "pk_test_GMW5EdI51d75nonOsRvu10Db",
       "websiteName": "Transcode"
     }
