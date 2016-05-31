@@ -46,7 +46,7 @@ services:
     volumes:
       - /var/lib/data
   core:
-    image: celery
+    image: wdhif/transcode-celery
     environment:
       - C_FORCE_ROOT=true
       - BROKER_URL=amqp://guest:guest@broker//
@@ -68,7 +68,7 @@ services:
     expose:
       - "5672"
   worker:
-    image: celery
+    image: wdhif/transcode-celery
     environment:
       - C_FORCE_ROOT=true
       - BROKER_URL=amqp://guest:guest@broker//
