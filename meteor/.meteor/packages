@@ -26,5 +26,14 @@ iron:router
 less
 matb33:collection-hooks
 meteorhacks:cluster
+meteorhacks:npm
+mrgalaxy:stripe
+natestrauser:animate-css
 nemo64:bootstrap
+reactive-var
+smaltcreation:alert-i18n
+tap:i18n
 underscorestring:underscore.string
+
+
+npm-container

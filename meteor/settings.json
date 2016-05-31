@@ -1,5 +1,19 @@
 {
+  "mail": {
+    "protocol": "smtp",
+    "username": "smalttestings@gmail.com",
+    "password": "VERtZrAiRliTenumpTIpHoR",
+    "server": "smtp.gmail.com",
+    "port": "465"
+  },
+  "stripe": {
+    "secretKey": "sk_test_BcmFKWJ43jmwtW5cDwHKZqVf"
+  },
   "public": {
-
+    "stripe": {
+      "currency": "eur",
+      "publishableKey": "pk_test_GMW5EdI51d75nonOsRvu10Db",
+      "websiteName": "Transcode"
+    }
   }
 }
