@@ -10,8 +10,8 @@ services:
       - mongo_3
       - mongo_setup
     environment:
-      # TODO: ROOT_URL ? IPaddress of master node ?
-      # ROOT_URL: "http://transcode.com"
+      ROOT_URL: "http://balancer"
+      CLUSTER_BALANCER_URL: "http://balancer"
       MONGO_URL: "mongodb://mongo_1:27017,mongo_2:27017,mongo_3:27017/transcode?replicaSet=transcode"
       CLUSTER_DISCOVERY_URL: "mongodb://mongo_1:27017,mongo_2:27017,mongo_3:27017/transcode?replicaSet=transcode"
       CLUSTER_SERVICE: "web"
@@ -19,6 +19,18 @@ services:
       REPLICA_SET_ID: transcode
       PRIMARY_MEMBER: mongo_1:27017
       SECONDARY_MEMBERS: mongo_2:27017,mongo_3:27017
+      METEOR_SETTINGS: '{"mail":{"protocol":"smtp","username":"smalttestings@gmail.com","password":"VERtZrAiRliTenumpTIpHoR","server":"smtp.gmail.com","port":"465"},"stripe":{"secretKey":"sk_test_BcmFKWJ43jmwtW5cDwHKZqVf"},"public":{"stripe":{"currency":"USD","publishableKey":"pk_test_GMW5EdI51d75nonOsRvu10Db","websiteName":"Transcode"}}}'
+  balancer:
+    image: dockercloud/haproxy
+    ports:
+      - 80:80
+    links:
+      - meteor
+    environment:
+      STATS_AUTH: "root:root"
+      STATS_PORT: "3000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   mongo_1:
     image: mongo
     command: --smallfiles --replSet transcode --quiet
