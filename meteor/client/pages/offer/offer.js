@@ -7,7 +7,6 @@ Template.offer.onCreated(function () {
     var self = this;
 
     self.autorun(function () {
-        console.log('ayooooooooooo');
         self.data.offer.set(getOffer(self.data).setReductions().setTaxes());
         self.data.offerWithoutReduction.set(getOffer(self.data).setTaxes());
     });

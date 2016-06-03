@@ -16,9 +16,17 @@ standard-minifiers      # JS/CSS minifiers run for production mode
 es5-shim                # ECMAScript 5 compatibility for older browsers.
 ecmascript              # Enable ECMAScript2015+ syntax in app code
 
+meteorhacks:npm
+npm-container
+
 accounts-facebook
 accounts-google
 accounts-password
+aldeed:autoform
+aldeed:collection2
+cfs:autoform
+cfs:filesystem
+cfs:standard-packages
 chrismbeckett:toastr
 fortawesome:fontawesome
 ian:accounts-ui-bootstrap-3
@@ -26,14 +34,14 @@ iron:router
 less
 matb33:collection-hooks
 meteorhacks:cluster
-meteorhacks:npm
 mrgalaxy:stripe
 natestrauser:animate-css
 nemo64:bootstrap
+ongoworks:security
 reactive-var
 smaltcreation:alert-i18n
 tap:i18n
+tomi:upload-server
+tomi:upload-jquery
+transcode:autoform-files
 underscorestring:underscore.string
-
-
-npm-container

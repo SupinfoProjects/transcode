@@ -1,0 +1,59 @@
+.af-smalt-previews {
+    padding: 0;
+}
+
+.af-smalt-previews .af-smalt-preview {
+    position: relative;
+    width: 200px;
+    height: 150px;
+    background-color: #eff1f7;
+    float: left;
+    border-bottom: 1px solid white;
+    border-right: 1px solid white;
+}
+
+.af-smalt-previews .af-smalt-preview img {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.af-smalt-previews .af-smalt-file-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 30px;
+    margin-top: -18px;
+    margin-left: -15px;
+}
+
+.af-smalt-previews .af-smalt-file-name {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    padding: 5px;
+    text-align: center;
+    word-wrap: break-word;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    max-height: 100%;
+    overflow: hidden;
+}
+
+.af-smalt-previews .af-smalt-preview .af-smalt-helper {
+    position: absolute;
+    top: 5px;
+}
+
+.af-smalt-previews .af-smalt-preview .af-smalt-helper-left {
+    left: 5px;
+}
+
+.af-smalt-previews .af-smalt-preview .af-smalt-helper-right {
+    right: 5px;
+}

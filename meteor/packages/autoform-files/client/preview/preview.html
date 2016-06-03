@@ -1,0 +1,32 @@
+<template name="afInputSmaltFilePreview">
+    {{#with file}}
+        <div class="af-smalt-preview" data-id="{{id}}">
+            {{#if isImage}}
+                <img class="img-responsive" src="{{src}}">
+            {{else}}
+                <div class="af-smalt-file-icon">
+                    <span class="glyphicon glyphicon-file"></span>
+                </div>
+                <div class="af-smalt-file-name">
+                    {{getName}}
+                </div>
+            {{/if}}
+            {{#if error}}
+                <span class="af-smalt-helper af-smalt-helper-left label label-danger" title="{{error.reason}}">
+                    <span class="glyphicon glyphicon-warning-sign"></span>
+                </span>
+            {{else}}
+                {{#if doc.isUploaded}}
+                    <button type="button" class="af-smalt-helper af-smalt-helper-right btn btn-xs btn-danger remove">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                {{else}}
+                    <span class="af-smalt-helper af-smalt-helper-right label label-info">
+                    <span class="glyphicon glyphicon-refresh"></span>
+                    {{doc.uploadProgress}} %
+                </span>
+                {{/if}}
+            {{/if}}
+        </div>
+    {{/with}}
+</template>

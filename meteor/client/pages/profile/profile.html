@@ -6,18 +6,15 @@
                     {{name}}
                     <small>{{email}}</small>
                 </h2>
-                <p>
-                    <a class="btn btn-primary" href="#">
-                        <i class="fa fa-file-video-o"></i>
-                        Convert a new video
-                    </a>
-                </p>
             </div>
         </div>
         <div class="container">
             <div class="row">
                 <div id="videos" class="col-sm-8">
-
+                    {{#autoForm collection="Collection.Tasks" id="insert-task-form" type="insert"}}
+                        {{> afQuickField name='file'}}
+                        <button type="submit" class="btn btn-primary">Submit file</button>
+                    {{/autoForm}}
                 </div>
                 <div id="offer" class="col-sm-4">
                     {{> offer offerOptions}}
