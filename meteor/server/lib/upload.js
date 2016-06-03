@@ -5,9 +5,9 @@ Meteor.startup(function () {
     UploadServer.init({
         tmpDir: `${Meteor.settings.data}/tmp`,
         uploadDir: Meteor.settings.data,
-        validateRequest: () => '404 - File not found',
+        validateRequest: req => req.url === '/' ? null : '404 - File not found',
         checkCreateDirectories: true,
-        finished: function(fileInfo, formFields) {
+        finished: function(fileInfo, formData) {
             const id = Random.id();
             const format = _.last(fileInfo.name.split('.'));
             const newPath = `/${id}.${format}`;
@@ -16,10 +16,12 @@ Meteor.startup(function () {
             
             Collection.Files.insert({
                 id,
+                format,
                 originalName: fileInfo.name,
                 path: newPath,
                 size: fileInfo.size,
-                type: fileInfo.type
+                type: fileInfo.type,
+                privateKey: formData.privateKey
             });
             
         },

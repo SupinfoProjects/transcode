@@ -42,6 +42,11 @@ Template.profile.helpers({
                 }
             }
         };
+    },
+    uploadFormData: function () {
+        return {
+            privateKey: this.user.privateKey
+        };
     }
 });
 
@@ -49,6 +54,7 @@ function openTransactionSuccessAlert (options) {
     swal({
         title: 'Payment achieved with success !',
         text: Blaze.toHTML(Blaze.With(options.data, function () {
+            // TODO: define template "transactionSuccess"
             return Template.transactionSuccess;
         })),
         html: true,

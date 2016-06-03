@@ -2,7 +2,8 @@
   "name": "transcode",
   "private": true,
   "scripts": {
-    "start": "meteor run --settings settings.json"
+    "start": "meteor run --settings settings.json",
+    "reset": "meteor reset && rm .uploads -R"
   },
   "dependencies": {
     "fs": "0.0.2"

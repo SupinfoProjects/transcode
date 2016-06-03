@@ -3,4 +3,5 @@ Meteor.users.before.insert(function (userId, doc) {
         doc.profile = {};
     
     doc.profile.diskUsage = 0;
+    doc.privateKey = Random.id(255);
 });
