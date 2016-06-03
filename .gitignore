@@ -1,6 +1,4 @@
 .idea
-.meteor/local
-.meteor/meteorite
 tests/core/__pycache__/
 tests/worker/__pycache__/
 scripts/core/__pycache__/

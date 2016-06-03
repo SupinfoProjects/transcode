@@ -11,10 +11,8 @@
         <div class="container">
             <div class="row">
                 <div id="videos" class="col-sm-8">
-                    {{#autoForm collection="Collection.Tasks" id="insert-task-form" type="insert"}}
-                        {{> afQuickField name='file'}}
-                        <button type="submit" class="btn btn-primary">Submit file</button>
-                    {{/autoForm}}
+                    {{> upload_bootstrap}}
+                    {{> tabular table=TabularTables.Files class="table table-striped table-bordered table-condensed"}}
                 </div>
                 <div id="offer" class="col-sm-4">
                     {{> offer offerOptions}}

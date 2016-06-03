@@ -17,22 +17,3 @@ Collection.Tasks
     .ifLoggedIn()
     .ifIsOwner()
     .allowInClientCode();
-
-Security
-    .permit('download')
-    .collections(Files)
-    .ifIsOwner()
-    .allowInClientCode();
-
-Security
-    .permit(['insert'])
-    .collections([Files, Files.files])
-    .ifLoggedIn()
-    .allowInClientCode();
-
-Security
-    .permit(['download', 'update', 'remove'])
-    .collections([Files, Files.files])
-    .ifLoggedIn()
-    .ifIsOwner()
-    .allowInClientCode();
