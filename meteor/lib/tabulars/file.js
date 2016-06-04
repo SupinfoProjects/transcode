@@ -7,6 +7,8 @@ new Tabular.Table({
     columns: [
         { data: 'originalName', title: 'Name' },
         { data: 'type', title: 'Type' },
+        { data: 'numeralSize()', title: 'Size' },
+        { data: 'state()', title: 'Status' },
         {
             tmpl: Meteor.isClient && Template.profileFileActions,
             tmplContext: doc => ({
@@ -15,5 +17,5 @@ new Tabular.Table({
             title: 'Actions'
         }
     ],
-    extraFields: ['associatedToTask']
+    extraFields: ['size', 'status']
 });

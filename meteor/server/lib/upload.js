@@ -21,6 +21,7 @@ Meteor.startup(function () {
                 path: newPath,
                 size: fileInfo.size,
                 type: fileInfo.type,
+                status: 'new',
                 privateKey: formData.privateKey
             });
             

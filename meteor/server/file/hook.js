@@ -11,7 +11,7 @@ Collection.Files.before.insert(function (userId, doc) {
     });
 
     doc.createdBy = user._id;
-    doc.associatedToTask = false;
+    doc.status = 'new';
 });
 
 Collection.Files.after.insert(function (userId, doc) {

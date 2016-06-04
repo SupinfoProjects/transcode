@@ -47,6 +47,15 @@ Template.profile.helpers({
         return {
             privateKey: this.user.privateKey
         };
+    },
+    diskUsage: function () {
+        return `${numeral(this.user.profile.diskUsage).format('0.0b')} / 10GB`;
+    },
+    gravatar: function () {
+        return Gravatar.imageUrl(UserHelper.getEmail(this.user), {
+            size: 75,
+            default: 'mm'
+        });
     }
 });
 
@@ -54,7 +63,6 @@ function openTransactionSuccessAlert (options) {
     swal({
         title: 'Payment achieved with success !',
         text: Blaze.toHTML(Blaze.With(options.data, function () {
-            // TODO: define template "transactionSuccess"
             return Template.transactionSuccess;
         })),
         html: true,

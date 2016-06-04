@@ -24,16 +24,20 @@ random
 reactive-var
 
 aldeed:tabular
+dburles:collection-helpers
 chrismbeckett:toastr
 fortawesome:fontawesome
 ian:accounts-ui-bootstrap-3
 iron:router
+jparker:gravatar
 matb33:collection-hooks
 meteorhacks:cluster
 mrgalaxy:stripe
 natestrauser:animate-css
 nemo64:bootstrap
+numeral:numeral
 ongoworks:security
+reywood:publish-composite
 smaltcreation:alert-i18n
 tap:i18n
 tomi:upload-server
