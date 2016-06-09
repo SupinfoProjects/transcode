@@ -5,10 +5,12 @@ ONBUILD COPY ./ /app
 ONBUILD RUN bash $METEORD_DIR/on_build.sh
 
 RUN \
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927 && \
-    echo "deb http://repo.mongodb.org/apt/debian wheezy/mongodb-org/3.2 main" | tee /etc/apt/sources.list.d/mongodb-org-3.2.list && \
-	apt-get update && apt-get upgrade -y && \
-	apt-get install -y mongodb-org-shell
+	echo "deb http://repo.mongodb.org/apt/debian wheezy/mongodb-org/3.0 main" | tee /etc/apt/sources.list.d/mongodb-org-3.0.list && \
+	apt-get update && apt-get upgrade -y
+
+RUN apt-get install -y --force-yes mongodb-org-shell
+RUN npm update -g npm
+RUN cd /app && npm install
 
 COPY ./wait-mongo.sh /wait-mongo.sh
 
