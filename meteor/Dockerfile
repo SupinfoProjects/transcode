@@ -9,8 +9,7 @@ RUN \
 	apt-get update && apt-get upgrade -y
 
 RUN apt-get install -y --force-yes mongodb-org-shell
-RUN npm update -g npm
-RUN cd /app && npm install
+RUN npm install -g download-file fibers hiredis mime node-celery
 
 COPY ./wait-mongo.sh /wait-mongo.sh
 
