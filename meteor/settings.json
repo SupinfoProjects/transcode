@@ -42,5 +42,6 @@
       ]
     }
   },
-  "data": "/home/nicolas/Projets/Transcode/meteor/.uploads"
+  "data": "/data",
+  "broker": "amqp://guest:guest@broker//"
 }

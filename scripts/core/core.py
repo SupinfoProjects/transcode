@@ -6,24 +6,16 @@ from subprocess import PIPE, Popen, DEVNULL, check_call
 from celery import Celery
 from celery.result import ResultSet
 
-from worker.worker import process_video_part
+from worker.worker import process_part
 
 app = Celery('core', backend='amqp', broker='amqp://')
-WORKERS = 10
 
 
-@app.task(name='core.process_video')
-def process_video(input_path, output_format):
-    video_length = get_video_length(input_path)
-    part_length = int(video_length / WORKERS)
-
-    output_part_paths = convert_video(input_path, output_format, video_length, part_length)
-    output_path = concatenate_video_parts(input_path, output_format, output_part_paths)
-
-    return output_path
+def get_total_workers():
+    return 10
 
 
-def get_video_length(input_path):
+def get_file_length(input_path):
     ffmpeg_info = Popen(["ffmpeg", "-i", input_path], stdout=PIPE, stderr=PIPE, universal_newlines=True)
     output = Popen(["grep", 'Duration'], stdin=ffmpeg_info.stderr, stdout=PIPE, universal_newlines=True)
     ffmpeg_info.stdout.close()
@@ -39,17 +31,28 @@ def get_video_length(input_path):
 
         return hours * 3600 + minutes * 60 + seconds + milliseconds
     else:
-        raise Exception("Video length not found")
+        raise Exception("File length not found {}".format(input_path))
 
 
-def convert_video(input_path, output_format, video_length, part_length):
+@app.task(name='core.process_file')
+def process_file(is_video, input_path, output_format):
+    file_length = get_file_length(input_path)
+    part_length = int(file_length / get_total_workers())
+
+    output_part_paths = convert_file(is_video, input_path, output_format, file_length, part_length)
+    output_path = concatenate_parts(input_path, output_format, output_part_paths)
+
+    return output_path
+
+
+def convert_file(is_video, input_path, output_format, video_length, part_length):
     rs = ResultSet([])
 
-    for i in range(WORKERS):
+    for i in range(get_total_workers()):
         start_at = i * part_length
-        stop_at = start_at + part_length if i != WORKERS - 1 else video_length
+        stop_at = start_at + part_length if i != get_total_workers() - 1 else video_length
         print("worker {} will process from {}s to {}s".format(i + 1, start_at, stop_at))
-        rs.add(process_video_part.delay(input_path, output_format, start_at, stop_at))
+        rs.add(process_part.delay(is_video, input_path, output_format, start_at, stop_at))
 
     return rs.get()
 
@@ -66,7 +69,7 @@ def create_parts_list(input_name, output_part_paths):
     return parts_list_path
 
 
-def concatenate_video_parts(input_path, output_format, output_part_paths):
+def concatenate_parts(input_path, output_format, output_part_paths):
     base_name = os.path.basename(input_path)
     input_name = os.path.splitext(base_name)[0]
 
