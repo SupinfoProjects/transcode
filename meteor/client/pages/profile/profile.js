@@ -5,43 +5,8 @@ Template.profile.helpers({
     email: function () {
         return UserHelper.getEmail(this.user);
     },
-    offerOptions: function () {
-        return {
-            panelClass: 'success',
-            type: 'credits',
-            icon: 'fa fa-money',
-            title: 'template.offer.credits.title',
-            price: {
-                before: 'template.offer.credits.discount',
-                after: 'template.offer.credits.price'
-            },
-            li: [
-                'template.offer.credits.li.1',
-                'template.offer.credits.li.2'
-            ],
-            buttonClass: 'success',
-            button: 'template.offer.credits.buy',
-            form: {
-                value: 1,
-                min: 1,
-                max: 120,
-                helpText: 'template.offer.credits.form.help-text',
-                tooltip: 'template.offer.credits.buy'
-            },
-            stripe: {
-                description: 'template.offer.credits.stripe.description',
-                method: 'buyCredits',
-                callback: function (data) {
-                    openTransactionSuccessAlert({
-                        data: data,
-                        confirmButtonText: 'template.offer.credits.confirm',
-                        callback: function () {
-                            return false;
-                        }
-                    });
-                }
-            }
-        };
+    credits: function () {
+        return UserHelper.getCredits(this.user);
     },
     uploadFormData: function () {
         return {
@@ -49,7 +14,7 @@ Template.profile.helpers({
         };
     },
     diskUsage: function () {
-        return `${numeral(this.user.profile.diskUsage).format('0.0b')} / 10GB`;
+        return numeral(this.user.profile.diskUsage).format('0.00 b');
     },
     gravatar: function () {
         return Gravatar.imageUrl(UserHelper.getEmail(this.user), {
@@ -59,19 +24,30 @@ Template.profile.helpers({
     }
 });
 
-function openTransactionSuccessAlert (options) {
-    swal({
-        title: 'Payment achieved with success !',
-        text: Blaze.toHTML(Blaze.With(options.data, function () {
-            return Template.transactionSuccess;
-        })),
-        html: true,
-        type: 'success',
-        confirmButtonColor: '#35a992',
-        confirmButtonText: 'Continue'
-    }, function (isConfirm) {
-        if (isConfirm) {
-            options.callback();
+Template.profile.events({
+    'click #upload-from-url': function (event) {
+        const input = $('#file-url');
+        const url = input.val().trim();
+
+        if (url) {
+            const button = $(event.target);
+
+            if (button.is(':disabled')) {
+                return false;
+            }
+
+            button.prop('disabled', true);
+
+            Meteor.call('uploadFromUrl', url, err => {
+                if (err) {
+                    swal('Error', err.reason, 'error');
+                } else {
+                    swal('File uploaded', 'The file has been uploaded.', 'success');
+                    input.val('');
+                }
+
+                button.prop('disabled', false);
+            });
         }
-    });
-}
+    }
+});

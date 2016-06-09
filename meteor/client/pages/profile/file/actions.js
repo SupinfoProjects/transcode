@@ -8,35 +8,41 @@ Template.profileFileActions.events({
 
         button.prop('disabled', true);
 
-        swal({
-            title: "In wich format ?",
-            text: "Refer to the table below (avi, wmv, flv...)",
-            type: "input",
-            showCancelButton: true,
-            closeOnConfirm: false,
-            animation: "slide-from-top",
-            inputPlaceholder: "avi"
-        }, function(inputValue){
-            if (inputValue === 'mp4') { // TODO, check if good format
-                Meteor.call('convertFile', template.data.doc._id, inputValue, error => {
-                    if (error) {
-                        swal('Error!', error.reason, "error");
-                        console.log(error);
-                    } else {
-                        swal('Nice, check your files!', `We are processing... Your file will be "${inputValue}" at any moment`);
-                    }
-                });
-            }
-            else if (inputValue === "") {
-                swal.showInputError("You need to write something!");
-            }
-            else if (inputValue === "toto") {
-                swal.showInputError("We can't convert your file in that format");
-            }
+        const modal = ReactiveModal.initDialog({
+            template: Template.profileAskFormat,
+            title: 'Convert your file',
+            removeOnHide: true,
+            buttons: {
+                cancel: {
+                    class: 'btn-danger',
+                    label: 'Cancel'
+                },
+                convert: {
+                    class: 'btn-success',
+                    label: 'Convert',
+                    closeModalOnClick: false
+                }
 
-            button.prop('disabled', false);
-            return false;
+            },
+            doc: template.data
         });
+
+        modal.buttons.convert.on('click', () => {
+            const fileId = template.data.doc._id;
+            const outputFormat = $(modal.modalTarget).find('#output-format').val();
+            const price = template.data.doc.price;
+
+            StripeHandler.checkout(fileId, outputFormat, price, () => {
+                modal.hide();
+                swal(
+                    'Task started',
+                    'Your payment has been processed successfully. Your file is being converted.',
+                    'success'
+                );
+            });
+        });
+
+        modal.show();
     },
     'click .delete': function (event, template) {
         swal({
@@ -51,7 +57,10 @@ Template.profileFileActions.events({
             closeOnCancel: false
         }, function(isConfirm){
             if (isConfirm) {
+                swal.disableButtons();
                 Meteor.call('deleteFile', template.data.doc._id, error => {
+                    swal.enableButtons();
+
                     if (error) {
                         swal('Error!', error.reason, "error");
                     } else {

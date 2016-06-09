@@ -16,10 +16,7 @@ Router.route('/profile', {
     data: function () {
         if (this.ready()) {
             return {
-                user: Meteor.user(),
-                tasks: Collection.Tasks.find({
-                    userId: Meteor.userId()
-                })
+                user: Meteor.user()
             };
         }
     }

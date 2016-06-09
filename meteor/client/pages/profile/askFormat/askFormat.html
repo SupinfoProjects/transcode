@@ -1,0 +1,10 @@
+<template name="profileAskFormat">
+    <div class="form-group">
+        <label for="output-format">Format</label>
+        <select class="form-control" id="output-format">
+            {{#each formats}}
+                <option value="{{this}}">{{this}}</option>
+            {{/each}}
+        </select>
+    </div>
+</template>

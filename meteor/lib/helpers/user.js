@@ -21,4 +21,8 @@ UserHelper = class UserHelper {
     static getFullName (user) {
         return _.has(user, 'profile') && user.profile.name;
     }
+
+    static getCredits(user) {
+        return user.profile.credits || 0;
+    }
 };

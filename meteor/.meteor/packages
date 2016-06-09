@@ -24,12 +24,13 @@ random
 reactive-var
 
 aldeed:tabular
-dburles:collection-helpers
 chrismbeckett:toastr
+dburles:collection-helpers
 fortawesome:fontawesome
 ian:accounts-ui-bootstrap-3
 iron:router
 jparker:gravatar
+kit:sweetalert
 matb33:collection-hooks
 meteorhacks:cluster
 mrgalaxy:stripe
@@ -38,8 +39,7 @@ nemo64:bootstrap
 numeral:numeral
 ongoworks:security
 reywood:publish-composite
-smaltcreation:alert-i18n
-tap:i18n
-tomi:upload-server
 tomi:upload-jquery
+tomi:upload-server
 underscorestring:underscore.string
+pahans:reactive-modal

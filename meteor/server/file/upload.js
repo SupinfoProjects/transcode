@@ -2,6 +2,8 @@ import fs from 'fs';
 import { Meteor } from 'meteor/meteor';
 
 Meteor.startup(function () {
+    const extensions = _.union(Meteor.settings.public.formats.audio, Meteor.settings.public.formats.video);
+
     UploadServer.init({
         tmpDir: `${Meteor.settings.data}/tmp`,
         uploadDir: Meteor.settings.data,
@@ -26,6 +28,6 @@ Meteor.startup(function () {
             });
             
         },
-        acceptFileTypes: /^.+\.(avi|wmv|flv|mpe?g|mp4|mkv|webm|ogg|ogv|ogc|mov|3gp|aac|mp3|oga|wav|wma)$/i
+        acceptFileTypes: new RegExp(`^.+\.(${extensions.join('|')})$`, 'i')
     });
 });

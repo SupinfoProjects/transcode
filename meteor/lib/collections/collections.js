@@ -1,12 +1,10 @@
 Collection = {
-    Tasks: new Mongo.Collection('tasks'),
     Files: new Mongo.Collection('files'),
     Charges: new Meteor.Collection('charges')
 };
 
 Collection.Files.helpers({
     state: function () {
-        console.log(this);
         switch (this.status) {
             case 'new':
                 return 'Not converted';
@@ -19,7 +17,6 @@ Collection.Files.helpers({
         }
     },
     numeralSize: function () {
-        console.log(this);
-        return numeral(this.size).format('0 b');
+        return numeral(this.size).format('0.00 b');
     }
 });

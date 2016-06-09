@@ -1,12 +1,19 @@
 <template name="profileFileActions">
     {{#unless processing}}
-        <div class="text-right">
-            {{#if converted}}
-                <a href="/file/{{doc.id}}" class="btn btn-xs btn-default download"><i class="fa fa-download"></i> Download</a>
-            {{else}}
-                <button class="btn btn-xs btn-info convert"><i class="fa fa-share"></i> Convert</button>
-            {{/if}}
-            <button class="btn btn-xs btn-danger delete"><i class="fa fa-trash"></i> Delete</button>
-        </div>
+        {{#if converted}}
+            <a href="/file/{{doc.id}}" class="btn btn-xs btn-default download">
+                <i class="fa fa-download"></i>
+                Download
+            </a>
+        {{else}}
+            <button class="btn btn-xs btn-info convert">
+                <i class="fa fa-share"></i>
+                Convert
+            </button>
+        {{/if}}
+        <button class="btn btn-xs btn-danger delete">
+            <i class="fa fa-trash"></i>
+            Delete
+        </button>
     {{/unless}}
 </template>

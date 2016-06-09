@@ -11,9 +11,34 @@
   },
   "public": {
     "stripe": {
-      "currency": "USD",
+      "currency": "usd",
       "publishableKey": "pk_test_GMW5EdI51d75nonOsRvu10Db",
       "websiteName": "Transcode"
+    },
+    "formats": {
+      "audio": [
+        "3gp",
+        "avi",
+        "flv",
+        "mkv",
+        "mov",
+        "mp4",
+        "mpeg",
+        "mpg",
+        "ogg",
+        "ogv",
+        "webm",
+        "wmv"
+      ],
+      "video": [
+        "aac",
+        "ac3",
+        "mp3",
+        "oga",
+        "ogg",
+        "wav",
+        "wma"
+      ]
     }
   },
   "data": "/home/nicolas/Projets/Transcode/meteor/.uploads"

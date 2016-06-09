@@ -10,26 +10,53 @@
                     <small>{{email}}</small>
                 </h2>
                 <p>
-                    <span>{{diskUsage}}</span> -
-                    <span>{{user.profile.credits}} credits</span>
+                    <span>{{diskUsage}} / 10.0 GB</span>
                 </p>
             </div>
         </div>
         <div class="container">
             <div id="files">
-                <div id="upload">
-                    {{> upload_bootstrap formData=uploadFormData}}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Upload a file</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div id="upload">
+                                    {{> upload_bootstrap formData=uploadFormData}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Load a file</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="input-group">
+                                    <input type="url" class="form-control" placeholder="http://www.example.com/video.mp4" id="file-url">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info" type="button" id="upload-from-url">
+                                            <i class="glyphicon glyphicon-upload"></i>
+                                            Upload
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div id="tabular">
-                    {{> tabular table=TabularTables.Files class='table table-striped table-bordered table-condensed'}}
-                </div>
-            </div>
-            <div class="row">
-                <div id="offer" class="col-sm-4">
-                    {{> offer offerOptions}}
-                </div>
-                <div class="col-sm-8">
-                    {{> formatTable}}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Uploaded files</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="tabular">
+                            {{> tabular table=TabularTables.Files class='table table-striped table-bordered table-condensed'}}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

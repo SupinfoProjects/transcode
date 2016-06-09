@@ -1,12 +1,11 @@
-import fs from 'fs';
-
 if (Meteor.isServer) {
+    const fs = Npm.require('fs');
     const fail = response => {
         response.statusCode = 404;
         response.end('<h1>404 - File not found</h1>');
     };
 
-    const dataFile = function() {
+    const dataFile = () => {
         const file = `${Meteor.settings.data}/${this.params.name}`;
 
         let stat = null;

@@ -1,5 +1,5 @@
 new Tabular.Table({
-    name: "Files",
+    name: 'Files',
     selector: userId => ({
         createdBy: userId
     }),
@@ -17,5 +17,5 @@ new Tabular.Table({
             title: 'Actions'
         }
     ],
-    extraFields: ['size', 'status']
+    extraFields: ['size', 'status', 'ext', 'isAudio', 'isVideo', 'price']
 });

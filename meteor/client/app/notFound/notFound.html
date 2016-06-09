@@ -1,14 +1,16 @@
 <template name="notFound">
     <div id="not-found">
-        <div class="container">
-            <h1>Did you lost ?</h1>
-            <p>This page doesn't exist, but you can go to the home and convert all your videos. ;)</p>
-            <p>
-                <a href="{{pathFor 'home'}}" class="btn btn-primary">
-                    <i class="fa fa-home"></i>
-                    Go home
-                </a>
-            </p>
+        <div class="jumbotron">
+            <div class="container text-center">
+                <h1>Are you lost?</h1>
+                <p>This page doesn't exist, but you can go to the home and convert all your videos. ;)</p>
+                <p>
+                    <a class="btn btn-primary btn-lg" href="{{pathFor 'home'}}">
+                        <i class="fa fa-home"></i>
+                        Go home
+                    </a>
+                </p>
+            </div>
         </div>
     </div>
 </template>
