@@ -6,7 +6,7 @@ new Tabular.Table({
     collection: Collection.Files,
     columns: [
         { data: 'originalName', title: 'Name' },
-        { data: 'type', title: 'Type' },
+        { data: 'ext', title: 'Format' },
         { data: 'numeralSize()', title: 'Size' },
         { data: 'state()', title: 'Status' },
         {
@@ -17,5 +17,5 @@ new Tabular.Table({
             title: 'Actions'
         }
     ],
-    extraFields: ['size', 'status', 'ext', 'isAudio', 'isVideo', 'price']
+    extraFields: ['size', 'status', 'isAudio', 'isVideo', 'price']
 });

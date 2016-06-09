@@ -12,12 +12,12 @@ Collection.Files.before.insert(function (userId, doc) {
 
     doc.createdBy = user._id;
     doc.status = 'new';
-    doc.ext = _.last(doc.type.split('/'));
+    doc.ext = _.last(doc.originalName.split('.'));
 
     doc.isAudio = _.contains(Meteor.settings.public.formats.audio, doc.ext);
     doc.isVideo = _.contains(Meteor.settings.public.formats.video, doc.ext);
 
-    const price = doc.size / 1048576;
+    const price = doc.size / 1048576 * 0.01;
     doc.price = price.toFixed(2);
 });
 

@@ -1,13 +1,5 @@
 Template.profileFileActions.events({
     'click .convert': function (event, template) {
-        const button = $(event.target);
-
-        if (button.is(':disabled')) {
-            return false;
-        }
-
-        button.prop('disabled', true);
-
         const modal = ReactiveModal.initDialog({
             template: Template.profileAskFormat,
             title: 'Convert your file',
@@ -40,6 +32,10 @@ Template.profileFileActions.events({
                     'success'
                 );
             });
+        });
+
+        modal.buttons.convert.on('cancel', () => {
+            button.prop('disabled', false);
         });
 
         modal.show();

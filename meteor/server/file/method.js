@@ -3,6 +3,7 @@ import url from 'url';
 import mime from 'mime';
 import download from 'download-file';
 import Future from 'fibers/future';
+import celery from 'node-celery';
 
 Meteor.methods({
     uploadFromUrl: function (link) {
@@ -83,18 +84,52 @@ Meteor.methods({
             }
         });
 
-        // TODO: call celery
+        const client = celery.createClient({
+            CELERY_BROKER_URL: Meteor.settings.broker,
+            CELERY_RESULT_BACKEND: 'amqp'
+        });
+
+        client.on('error', err => {
+            console.log(err);
+        });
+
+        client.on('connect', Meteor.bindEnvironment(() => {
+            const inputPath = `/data${file.path}`;
+            
+            client.call('core.process_file', [file.isVideo, inputPath, outputFormat], Meteor.bindEnvironment(outputPath => {
+                client.end();
+
+                if (fs.existsSync(inputPath)) {
+                    fs.unlinkSync(inputPath);
+                }
+
+                if (fs.existsSync(outputPath)) {
+                    const newPath = outputPath.replace('/tmp', '');
+                    fs.renameSync(outputPath, newPath);
+                }
+                
+                console.log('outputPath:', outputPath);
+
+                Collection.Files.update(fileId, {
+                    $set: {
+                        status: 'converted'
+                    }
+                });
+
+                Meteor.users.update(Meteor.userId(), {
+                    $inc: {
+                        'profile.diskUsage': -size
+                    }
+                });
+            }));
+        }));
     },
     deleteFile: (fileId) => {
         const file = getFile(fileId);
         const filePath = Meteor.settings.data + file.path;
 
         if (fs.existsSync(filePath)) {
-            fs.unlink(filePath, error => {
-                if (error) {
-                    throw new Meteor.Error(error.toString());
-                }
-            });
+            fs.unlinkSync(filePath);
         }
 
         const size = file.size;
