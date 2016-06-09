@@ -16,26 +16,27 @@
       "websiteName": "Transcode"
     },
     "formats": {
-      "audio": [
+      "video": [
         "3gp",
         "avi",
+        "f4v",
         "flv",
         "mkv",
         "mov",
         "mp4",
         "mpeg",
         "mpg",
-        "ogg",
         "ogv",
         "webm",
-        "wmv"
+        "wmv",
+        "yuv"
       ],
-      "video": [
+      "audio": [
         "aac",
         "ac3",
+        "flac",
         "mp3",
         "oga",
-        "ogg",
         "wav",
         "wma"
       ]
