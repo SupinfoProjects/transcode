@@ -20,6 +20,8 @@ services:
       PRIMARY_MEMBER: mongo_1:27017
       SECONDARY_MEMBERS: mongo_2:27017,mongo_3:27017
       METEOR_SETTINGS: '{"mail":{"protocol":"smtp","username":"smalttestings@gmail.com","password":"VERtZrAiRliTenumpTIpHoR","server":"smtp.gmail.com","port":"465"},"stripe":{"secretKey":"sk_test_BcmFKWJ43jmwtW5cDwHKZqVf"},"public":{"stripe":{"currency":"USD","publishableKey":"pk_test_GMW5EdI51d75nonOsRvu10Db","websiteName":"Transcode"}}}'
+    volumes:
+      - ./.data:/data
   balancer:
     image: dockercloud/haproxy
     ports:
@@ -51,11 +53,6 @@ services:
       REPLICA_SET_ID: transcode
       PRIMARY_MEMBER: mongo_1:27017
       SECONDARY_MEMBERS: mongo_2:27017,mongo_3:27017
-  data:
-    image: ubuntu
-    volumes:
-      - /var/lib/data
-    command: sleep infinity
   core:
     image: wdhif/transcode-celery
     expose:
@@ -66,10 +63,9 @@ services:
       - C_FORCE_ROOT=true
       - BROKER_URL=amqp://guest:guest@broker//
       - CELERY_BROKER_URL=amqp://guest:guest@broker//
-    volumes_from:
-      - data  
     volumes:
       - ./scripts:/home/user
+      - ./.data:/data
     command: bash -c "celery -A core worker -l info --app=core.core.app"
   broker:
     image: rabbitmq
@@ -89,6 +85,5 @@ services:
       # - CELERY_APP=tasks
     volumes:
       - ./scripts:/home/user
-    volumes_from:
-      - data
+      - ./.data:/data
     command: bash -c "celery -A worker worker -l info --app=worker.worker.app"
