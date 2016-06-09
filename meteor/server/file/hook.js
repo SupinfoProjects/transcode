@@ -17,7 +17,12 @@ Collection.Files.before.insert(function (userId, doc) {
     doc.isAudio = _.contains(Meteor.settings.public.formats.audio, doc.ext);
     doc.isVideo = _.contains(Meteor.settings.public.formats.video, doc.ext);
 
-    const price = doc.size / 1048576 * 0.01;
+    let price = doc.size / 1048576 * 0.001;
+
+    if (price < 0.5) {
+        price = 0.5;
+    }
+
     doc.price = price.toFixed(2);
 });
 
