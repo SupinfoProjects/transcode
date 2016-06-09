@@ -6,9 +6,9 @@ if ! [ $(id -u) = 0 ]; then
 fi
 
 echo "Stopping all containers"
-docker stop {docker ps -a -q}
+docker stop $(docker ps -a -q)
 echo "Deleting all containers"
-docker rm {docker ps -a -q}
+docker rm $(docker ps -a -q)
 echo "Deleting all images"
-docker rmi {docker images -q}
+docker rmi $(docker images -q)
 echo "All docker containers and images have been stopped and deleted"
