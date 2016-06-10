@@ -68,7 +68,7 @@ services:
       - ./.data:/data
     command: bash -c "celery -A transcode worker -l info --app=core.core.app"
   broker:
-    image: rabbitmq
+    image: wdhif/transcode-rabbitmq
     expose:
       - "5672"
       - "15672"
