@@ -10,6 +10,10 @@ RUN \
 
 RUN apt-get install -y --force-yes mongodb-org-shell
 
+RUN mkdir -p /app/packages/transcode/.npm/
+
+COPY ./.npm/ /app/packages/transcode/.npm/
+
 COPY ./wait-mongo.sh /wait-mongo.sh
 
 EXPOSE 80
