@@ -1,7 +1,7 @@
 <template name="profileFileActions">
     {{#unless processing}}
         {{#if converted}}
-            <a href="/file/{{doc.id}}" class="btn btn-xs btn-default download">
+            <a href="/file/{{doc.id}}.{{doc.outputFormat}}" class="btn btn-xs btn-default download">
                 <i class="fa fa-download"></i>
                 Download
             </a>

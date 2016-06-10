@@ -17,5 +17,5 @@ new Tabular.Table({
             title: 'Actions'
         }
     ],
-    extraFields: ['size', 'status', 'isAudio', 'isVideo', 'price']
+    extraFields: ['id', 'size', 'status', 'isAudio', 'isVideo', 'price', 'outputFormat']
 });

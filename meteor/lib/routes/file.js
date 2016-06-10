@@ -5,7 +5,7 @@ if (Meteor.isServer) {
         response.end('<h1>404 - File not found</h1>');
     };
 
-    const dataFile = () => {
+    Router.route('/file/:name', function () {
         const file = `${Meteor.settings.data}/${this.params.name}`;
 
         let stat = null;
@@ -22,7 +22,5 @@ if (Meteor.isServer) {
         });
 
         fs.createReadStream(file).pipe(this.response);
-    };
-
-    Router.route('/file/:name', dataFile, {where: 'server'});
+    }, {where: 'server'});
 }
