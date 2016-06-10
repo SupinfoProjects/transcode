@@ -1,11 +1,4 @@
-import mime from 'mime';
-import download from 'download-file';
-import Future from 'fibers/future';
-import celery from 'node-celery';
-
-export const modules = {
-    mime,
-    download,
-    Future,
-    celery
-};
+mime = Npm.require('mime');
+download = Npm.require('download-file');
+Future = Npm.require('fibers/future');
+celery = Npm.require('node-celery');

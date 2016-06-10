@@ -51,3 +51,7 @@ Template.profile.events({
         }
     }
 });
+
+Template.profile.onCreated(function (){
+    Uploader.init(this);
+});

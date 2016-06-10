@@ -1,8 +1,5 @@
-import fs from 'fs';
-import url from 'url';
-import { modules } from 'meteor/transcode';
-
-const { mime, Future, download, celery } = modules;
+const fs = Npm.require('fs');
+const url = Npm.require('url');
 
 Meteor.methods({
     uploadFromUrl: function (link) {

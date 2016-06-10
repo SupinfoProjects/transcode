@@ -1,5 +1,4 @@
-import fs from 'fs';
-import { Meteor } from 'meteor/meteor';
+const fs = Npm.require('fs');
 
 Meteor.startup(function () {
     const extensions = _.union(Meteor.settings.public.formats.audio, Meteor.settings.public.formats.video);

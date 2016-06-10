@@ -1,10 +1,10 @@
 Package.describe({
-  name: 'transcode',
+  name: 'transcode:transcode',
   version: '0.0.1'
 });
 
 Package.onUse(function(api) {
-  api.versionsFrom('1.3.2.4');
+  api.versionsFrom('1.2.1');
 
   Npm.depends({
     'download-file': '0.1.5',
@@ -15,5 +15,15 @@ Package.onUse(function(api) {
   });
   
   api.use('ecmascript');
-  api.mainModule('transcode.js', 'server');
+
+  api.addFiles([
+    'transcode.js'
+  ], 'server');
+
+  api.export([
+    'download',
+    'Future',
+    'mime',
+    'celery'
+  ], 'server');
 });

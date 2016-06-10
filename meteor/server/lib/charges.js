@@ -1,6 +1,3 @@
-import { modules } from 'meteor/transcode';
-
-const { Future } = modules;
 const Stripe = StripeAPI(Meteor.settings.stripe.secretKey);
 
 ChargeHelper = class ChargeHelper {
