@@ -9,6 +9,10 @@ from celery.result import ResultSet
 from worker.worker import process_part
 
 app = Celery('core', backend='amqp', broker='amqp://')
+app.conf.update(
+    CELERY_TASK_SERIALIZER='json',
+    CELERY_RESULT_SERIALIZER='json'
+)
 
 
 def get_total_workers():
@@ -58,7 +62,7 @@ def convert_file(is_video, input_path, output_format, video_length, part_length)
 
 
 def create_parts_list(input_name, output_part_paths):
-    parts_list_path = "{}/.tmp/{}.txt".format(os.getcwd(), input_name)
+    parts_list_path = "/data/tmp/{}.txt".format(input_name)
     file = open(parts_list_path, 'w')
 
     for output_part_path in output_part_paths:
@@ -74,7 +78,7 @@ def concatenate_parts(input_path, output_format, output_part_paths):
     input_name = os.path.splitext(base_name)[0]
 
     parts_list_path = create_parts_list(input_name, output_part_paths)
-    output_path = "{}/.tmp/{}.{}".format(os.getcwd(), input_name, output_format)
+    output_path = "/data/tmp/{}.{}".format(input_name, output_format)
 
     template = "ffmpeg -f concat -safe 0 -i {} -c copy -strict -2 {}"
     command = template.format(parts_list_path, output_path)

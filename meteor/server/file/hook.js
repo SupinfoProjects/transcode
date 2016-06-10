@@ -19,8 +19,8 @@ Collection.Files.before.insert(function (userId, doc) {
 
     let price = doc.size / 1048576 * 0.001;
 
-    if (price < 0.5) {
-        price = 0.5;
+    if (price < 1) {
+        price = 1;
     }
 
     doc.price = price.toFixed(2);

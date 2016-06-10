@@ -66,11 +66,12 @@ services:
     volumes:
       - ./scripts:/home/user
       - ./.data:/data
-    command: bash -c "celery -A core worker -l info --app=core.core.app"
+    command: bash -c "celery -A transcode worker -l info --app=core.core.app"
   broker:
     image: rabbitmq
     expose:
       - "5672"
+      - "15672"
   worker:
     image: wdhif/transcode-celery
     expose:
@@ -86,4 +87,4 @@ services:
     volumes:
       - ./scripts:/home/user
       - ./.data:/data
-    command: bash -c "celery -A worker worker -l info --app=worker.worker.app"
+    command: bash -c "celery -A transcode worker -l info --app=worker.worker.app"

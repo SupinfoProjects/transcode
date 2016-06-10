@@ -1,9 +1,8 @@
 import fs from 'fs';
 import url from 'url';
-import mime from 'mime';
-import download from 'download-file';
-import Future from 'fibers/future';
-import celery from 'node-celery';
+import { modules } from 'meteor/transcode';
+
+const { mime, Future, download, celery } = modules;
 
 Meteor.methods({
     uploadFromUrl: function (link) {
@@ -96,9 +95,14 @@ Meteor.methods({
         client.on('connect', Meteor.bindEnvironment(() => {
             const inputPath = `/data${file.path}`;
             
-            client.call('core.process_file', [file.isVideo, inputPath, outputFormat], Meteor.bindEnvironment(outputPath => {
-                client.end();
+            client.call('core.process_file', [file.isVideo, inputPath, outputFormat], Meteor.bindEnvironment(result => {
+                if (!result || result.status !== 'SUCCESS') {
+                    console.log('process file not succeed', result);
+                    throw new Meteor.Error('convert-error', 'Conversion error occured');
+                }
 
+                const outputPath = result.result;
+                
                 if (fs.existsSync(inputPath)) {
                     fs.unlinkSync(inputPath);
                 }
@@ -121,6 +125,8 @@ Meteor.methods({
                         'profile.diskUsage': -size
                     }
                 });
+
+                client.end();
             }));
         }));
     },

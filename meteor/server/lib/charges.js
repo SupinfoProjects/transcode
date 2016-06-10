@@ -1,5 +1,7 @@
+import { modules } from 'meteor/transcode';
+
+const { Future } = modules;
 const Stripe = StripeAPI(Meteor.settings.stripe.secretKey);
-import Future from 'fibers/future';
 
 ChargeHelper = class ChargeHelper {
     static create (tokenId, fileId, amount) {
