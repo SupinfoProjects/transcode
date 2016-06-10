@@ -12,6 +12,6 @@ EXPOSE 15672
 
 CMD \
 	service rabbitmq-server start && \
-	/usr/local/bin/rabbitmqadmin declare queue name=my-new-queue durable=true && \
+	/usr/local/bin/rabbitmqadmin declare exchange --vhost=/ name=celeryresults type=direct && \
 	service rabbitmq-server stop && \
 	rabbitmq-server
