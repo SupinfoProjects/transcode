@@ -113,6 +113,7 @@ Meteor.methods({
                 }
                 
                 console.log('outputPath:', outputPath);
+                const fileInfo = fs.statSync(outputPath);
 
                 Collection.Files.update(fileId, {
                     $set: {
@@ -120,9 +121,11 @@ Meteor.methods({
                     }
                 });
 
+                const size = fileInfo.size - file.size;
+
                 Meteor.users.update(Meteor.userId(), {
                     $inc: {
-                        'profile.diskUsage': -size
+                        'profile.diskUsage': size
                     }
                 });
 
