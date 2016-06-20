@@ -71,6 +71,7 @@ Meteor.methods({
     convertFile: (tokenId, fileId, outputFormat) => {
         const file = getFile(fileId);
         const chargeId = ChargeHelper.create(tokenId, fileId, Math.round(file.price * 100));
+        const userId = Meteor.userId();
 
         Collection.Files.update(fileId, {
             $set: {
@@ -94,7 +95,11 @@ Meteor.methods({
         client.on('connect', Meteor.bindEnvironment(() => {
             const inputPath = `/data${file.path}`;
 
-            console.log('will call', inputPath);
+            console.log('before client.call', inputPath);
+
+            if (!fs.existsSync(inputPath)) {
+                return false;
+            }
 
             client.call('core.process_file', [file.isVideo, inputPath, outputFormat], Meteor.bindEnvironment(result => {
                 if (!result || result.status !== 'SUCCESS') {
@@ -124,7 +129,7 @@ Meteor.methods({
 
                 const size = fileInfo.size - file.size;
 
-                Meteor.users.update(Meteor.userId(), {
+                Meteor.users.update(userId, {
                     $inc: {
                         'profile.diskUsage': size
                     }
