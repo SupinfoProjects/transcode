@@ -1,4 +1,5 @@
 const Stripe = StripeAPI(Meteor.settings.stripe.secretKey);
+const Future = Npm.require('fibers/future');
 
 ChargeHelper = class ChargeHelper {
     static create (tokenId, fileId, amount) {

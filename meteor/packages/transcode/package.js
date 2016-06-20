@@ -8,7 +8,6 @@ Package.onUse(function(api) {
 
   Npm.depends({
     'download-file': '0.1.5',
-    fibers: '1.0.13',
     hiredis: '0.4.1',
     mime: '1.3.4',
     'node-celery': '0.2.6'
@@ -22,7 +21,6 @@ Package.onUse(function(api) {
 
   api.export([
     'download',
-    'Future',
     'mime',
     'celery'
   ], 'server');

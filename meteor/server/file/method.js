@@ -1,5 +1,6 @@
 const fs = Npm.require('fs');
 const url = Npm.require('url');
+const Future = Npm.require('fibers/future');
 
 Meteor.methods({
     uploadFromUrl: function (link) {
@@ -82,7 +83,8 @@ Meteor.methods({
 
         const client = celery.createClient({
             CELERY_BROKER_URL: Meteor.settings.broker,
-            CELERY_RESULT_BACKEND: 'amqp'
+            CELERY_RESULT_BACKEND: 'amqp',
+            DEFAULT_QUEUE: 'core'
         });
 
         client.on('error', err => {
@@ -91,7 +93,9 @@ Meteor.methods({
 
         client.on('connect', Meteor.bindEnvironment(() => {
             const inputPath = `/data${file.path}`;
-            
+
+            console.log('will call', inputPath);
+
             client.call('core.process_file', [file.isVideo, inputPath, outputFormat], Meteor.bindEnvironment(result => {
                 if (!result || result.status !== 'SUCCESS') {
                     console.log('process file not succeed', result);
@@ -99,18 +103,18 @@ Meteor.methods({
                 }
 
                 const outputPath = result.result;
+                const newPath = outputPath.replace('/tmp', '');
                 
                 if (fs.existsSync(inputPath)) {
                     fs.unlinkSync(inputPath);
                 }
 
                 if (fs.existsSync(outputPath)) {
-                    const newPath = outputPath.replace('/tmp', '');
                     fs.renameSync(outputPath, newPath);
                 }
-                
-                console.log('outputPath:', outputPath);
-                const fileInfo = fs.statSync(outputPath);
+
+                console.log('outputPath:', newPath);
+                const fileInfo = fs.statSync(newPath);
 
                 Collection.Files.update(fileId, {
                     $set: {
