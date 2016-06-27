@@ -19,7 +19,7 @@ services:
       REPLICA_SET_ID: transcode
       PRIMARY_MEMBER: mongo_1:27017
       SECONDARY_MEMBERS: mongo_2:27017,mongo_3:27017
-      METEOR_SETTINGS: '{"mail":{"protocol":"smtp","username":"smalttestings@gmail.com","password":"VERtZrAiRliTenumpTIpHoR","server":"smtp.gmail.com","port":"465"},"stripe":{"secretKey":"sk_test_BcmFKWJ43jmwtW5cDwHKZqVf"},"public":{"stripe":{"currency":"usd","publishableKey":"pk_test_GMW5EdI51d75nonOsRvu10Db","websiteName":"Transcode"},"formats":{"video":["3gp","avi","f4v","flv","mkv","mov","mp4","mpeg","mpg","ogv","webm","wmv","yuv"],"audio":["aac","ac3","flac","mp3","oga","wav","wma"]}},"data":"/data","broker":"amqp://guest:guest@broker//"}'
+      METEOR_SETTINGS: '{"mail":{"protocol":"smtp","username":"smalttestings@gmail.com","password":"VERtZrAiRliTenumpTIpHoR","server":"smtp.gmail.com","port":"465"},"stripe":{"secretKey":"sk_test_BcmFKWJ43jmwtW5cDwHKZqVf"},"public":{"stripe":{"currency":"usd","publishableKey":"pk_test_GMW5EdI51d75nonOsRvu10Db","websiteName":"Transcode"},"formats":{"video":["3gp","avi","f4v","flv","mkv","mov","mp4","mpeg","mpg","ogv","webm","wmv","yuv"],"audio":["aac","ac3","flac","mp3","oga","wav","wma"]}},"data":"/data","broker":"amqp://guest:guest@broker//","google":{"clientId":"398622006737-pj4be88r404b2tu89lcag9evqcg4v416.apps.googleusercontent.com","secret":"pOGZyxoEJkZ2FKK8KO9xgxzk"},"facebook":{"clientId":"1726755800903746","secret":"cefb82cefed87ac53af8f6738906a5a4"}}'
     volumes:
       - ./.data:/data
   balancer:

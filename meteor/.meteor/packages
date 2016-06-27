@@ -22,6 +22,7 @@ accounts-password
 less
 random
 reactive-var
+service-configuration
 
 transcode:transcode
 
@@ -40,8 +41,8 @@ natestrauser:animate-css
 nemo64:bootstrap
 numeral:numeral
 ongoworks:security
+pahans:reactive-modal
 reywood:publish-composite
 tomi:upload-jquery
 tomi:upload-server
 underscorestring:underscore.string
-pahans:reactive-modal

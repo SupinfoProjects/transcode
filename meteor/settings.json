@@ -43,5 +43,13 @@
     }
   },
   "data": "/data",
-  "broker": "amqp://guest:guest@broker//"
+  "broker": "amqp://guest:guest@broker//",
+  "google": {
+    "clientId": "398622006737-pj4be88r404b2tu89lcag9evqcg4v416.apps.googleusercontent.com",
+    "secret": "pOGZyxoEJkZ2FKK8KO9xgxzk"
+  },
+  "facebook": {
+    "clientId": "1726755800903746",
+    "secret": "cefb82cefed87ac53af8f6738906a5a4"
+  }
 }

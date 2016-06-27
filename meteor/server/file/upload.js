@@ -7,6 +7,16 @@ Meteor.startup(function () {
         tmpDir: `${Meteor.settings.data}/tmp`,
         uploadDir: Meteor.settings.data,
         validateRequest: req => req.url === '/' ? null : '404 - File not found',
+        // validateFile: Meteor.bindEnvironment(function (file, formData) {
+        //     const user = Meteor.users.findOne({
+        //         privateKey: formData.privateKey
+        //     });
+        //
+        //     if (user.profile.diskUsage + file.size > 10485760) {
+        //         return "Le fichier est trop volumineux. Vous n'avez que 10GB d'espace au total.";
+        //     }
+        //      return null;
+        // }),
         checkCreateDirectories: true,
         finished: function(fileInfo, formData) {
             const id = Random.id();
