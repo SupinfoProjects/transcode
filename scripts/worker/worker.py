@@ -26,16 +26,11 @@ def extract_part(is_video, input_path, start_at, stop_at):
 
     input_part_path = "/data/tmp/{}-{}{}".format(input_name, start_at, input_format)
 
-    # Codecs
-    codecs = '-acodec copy'
-
-    if is_video:
-        codecs += ' -vcodec copy'
-
     # Command
-    template = "ffmpeg -y -i {} -ss {} -t {} {} {}"
+    template = "ffmpeg -y -i {} -ss {} -t {} {}"
     t = '%.2f' % round(stop_at - start_at, 2)
-    command = template.format(input_path, start_at, t, codecs, input_part_path)
+    command = template.format(input_path, start_at, t, input_part_path)
+    print(command)
     check_call(shlex.split(command), universal_newlines=True)
 
     return input_part_path

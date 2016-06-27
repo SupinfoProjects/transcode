@@ -16,7 +16,7 @@ app.conf.update(
 
 
 def get_total_workers():
-    return 10
+    return 2
 
 
 def get_file_length(input_path):
