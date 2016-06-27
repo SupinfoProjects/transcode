@@ -123,7 +123,8 @@ Meteor.methods({
 
                 Collection.Files.update(fileId, {
                     $set: {
-                        status: 'converted'
+                        status: 'converted',
+                        outputSize: fileInfo.size
                     }
                 });
 
@@ -141,20 +142,34 @@ Meteor.methods({
     },
     deleteFile: (fileId) => {
         const file = getFile(fileId);
-        const filePath = Meteor.settings.data + file.path;
 
-        if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath);
-        }
+        if (file.status === 'new') {
+            const filePath = Meteor.settings.data + file.path;
 
-        const size = file.size;
-
-        Collection.Files.remove(fileId);
-        Meteor.users.update(Meteor.userId(), {
-            $inc: {
-                'profile.diskUsage': -size
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
             }
-        });
+
+            Collection.Files.remove(fileId);
+            Meteor.users.update(Meteor.userId(), {
+                $inc: {
+                    'profile.diskUsage': -file.size
+                }
+            });
+        } else if (file.status === 'converted') {
+            const filePath = `${Meteor.settings.data}/${file.id}.${file.outputFormat}`;
+
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+
+            Collection.Files.remove(fileId);
+            Meteor.users.update(Meteor.userId(), {
+                $inc: {
+                    'profile.diskUsage': -file.outputSize
+                }
+            });
+        }
     }
 });
 

@@ -30,7 +30,6 @@ def extract_part(is_video, input_path, start_at, stop_at):
     template = "ffmpeg -y -i {} -ss {} -t {} {}"
     t = '%.2f' % round(stop_at - start_at, 2)
     command = template.format(input_path, start_at, t, input_part_path)
-    print(command)
     check_call(shlex.split(command), universal_newlines=True)
 
     return input_part_path

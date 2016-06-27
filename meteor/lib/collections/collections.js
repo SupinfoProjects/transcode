@@ -18,5 +18,11 @@ Collection.Files.helpers({
     },
     numeralSize: function () {
         return numeral(this.size).format('0.00 b');
+    },
+    cleanOutputFormat: function () {
+        return this.outputFormat || '-';
+    },
+    cleanOutputSize: function () {
+        return this.outputSize ? numeral(this.outputSize).format('0.00 b') : '-';
     }
 });

@@ -4,10 +4,14 @@ new Tabular.Table({
         createdBy: userId
     }),
     collection: Collection.Files,
+    responsive: true,
+    autoWidth: false,
     columns: [
-        { data: 'originalName', title: 'Name' },
-        { data: 'ext', title: 'Format' },
-        { data: 'numeralSize()', title: 'Size' },
+        { data: 'originalName', title: 'Original name' },
+        { data: 'ext', title: 'Original format' },
+        { data: 'numeralSize()', title: 'Original size' },
+        { data: 'cleanOutputFormat()', title: 'Output format' },
+        { data: 'cleanOutputSize()', title: 'Output size' },
         { data: 'state()', title: 'Status' },
         {
             tmpl: Meteor.isClient && Template.profileFileActions,
@@ -17,5 +21,5 @@ new Tabular.Table({
             title: 'Actions'
         }
     ],
-    extraFields: ['id', 'size', 'status', 'isAudio', 'isVideo', 'price', 'outputFormat']
+    extraFields: ['id', 'size', 'status', 'isAudio', 'isVideo', 'price', 'outputFormat', 'outputSize']
 });
