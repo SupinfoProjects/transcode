@@ -15,4 +15,4 @@ To scale your application with docker
 
 You can access your app on the IP address of the web app, you can also access the HAProxy dashboard on the port 3000 and root:root as user and password.
 
-Full documentation : https://drive.google.com/folderview?id=0B6POgLLiioUrRDNZRGZMd2x3ZXM&usp=sharing
+Full documentation : https://github.com/wdhif/transcode/tree/master/doc
